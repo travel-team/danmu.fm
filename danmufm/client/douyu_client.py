@@ -8,15 +8,21 @@ class DouyuClient:
     """Docstring for DouyuClient. """
 
     def __init__(self,url,g_config):
-        self.DOUYU_PREFIX = "http://www.douyutv.com/"
+        self.DOUYU_PREFIX = "http://www.douyu.com/"
 
         if self.DOUYU_PREFIX not in url:
             url = self.DOUYU_PREFIX + url
         html = urlopen(url).read().decode()
+        
         room_info_json = re.search('var\s\$ROOM\s=\s({.*})', html).group(1)
-        auth_server_json = re.search('var\sroom_args\s=\s({.*})', html).group(1)
+        try:
+            auth_server_json = re.search('\$ROOM.args\s=\s({.*})', html).group(1)
+        except:
+            auth_server_json = re.search('var\sroom_args\s=\s({.*})', html).group(1)
+
         room_info_json_format = valid_json(room_info_json)
         auth_server_json_format = valid_json(auth_server_json)
+        print(json.dumps(room_info_json_format, ensure_ascii=False))
 
         if room_info_json_format != False and auth_server_json_format != False:
             js = room_info_json_format
@@ -36,6 +42,7 @@ class DouyuClient:
                     room["tags"].append(room_tags_json[js["room_tag_list"][i]]["name"])
 
             auth_servers = valid_json(unquote(auth_server_json_format["server_config"]))
+            print(str(auth_servers))
             auth_server_ip = auth_servers[0]["ip"]
             auth_server_port = auth_servers[0]["port"]
             client = DouyuDanmuClient(room,auth_server_ip, auth_server_port,g_config)
@@ -54,7 +61,7 @@ def valid_json(my_json):
 
 
 def main():
-    DouyuClient("http://www.douyutv.com/236274")
+    DouyuClient("http://www.douyutv.com/217853")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+import logging
+logger = logging.getLogger("danmufm")
 class ColorPrinter:
     RED = '\033[91m'
     GREEN = '\033[92m'

@@ -34,17 +34,6 @@ APP_DESC = """
                                 last_update 2016-02-16
 """
 
-
-logging.basicConfig(
-    format="%(asctime)s - \
-[%(process)d]%(filename)s:%(lineno)d - %(levelname)s: %(message)s",
-    datefmt='%Y-%m-%d %H:%I:%S',
-    # filename=os.path.expanduser('~/.danmu.fm.log'),
-    level=logging.INFO
-)
-
-logger = logging.getLogger('danmu.fm')
-
 def main():
 
     print(APP_DESC)
@@ -57,6 +46,15 @@ def main():
     parser.add_argument('-d','--danmu', help="读取~/.danmu.fm配置,请~/.danmu.fm指定数据库")
     parser.add_argument('url',metavar='URL',nargs='+', help="zhubo page URL (http://www.douyutv.com/*/)")
     args = parser.parse_args()
+    print((args.url)[0])
+    logging.basicConfig(
+        format="%(asctime)s - [%(process)d]%(filename)s:%(lineno)d - %(levelname)s: %(message)s",
+        datefmt='%Y-%m-%d %H:%I:%S',
+        filename=os.path.expanduser('./'+(args.url)[0]+'.danmu.fm.log'),
+        level=logging.DEBUG
+    )
+
+    logger = logging.getLogger('danmu.fm')
 
     #初始化日志
     # logger.setLevel(logging.DEBUG if args.verbose else logging.INFO)
