@@ -157,7 +157,7 @@ class DouyuDanmuClient(object):
         self.danmu_socket.connect(self.DANMU_ADDR)
         self.send_auth_loginreq_msg()
         recv_msg = self.auth_recv()
-        print(recv_msg)
+        #print('recv_msg——————————%s' % (recv_msg,))
         if "live_stat@=0" in recv_msg:
             self.live_stat = "离线"
         else:
@@ -175,8 +175,9 @@ class DouyuDanmuClient(object):
         # print(recv_msg)
         self.send_danmu_loginreq_msg()
         recv_msg = self.danmu_recv()
-        print(recv_msg)
+        #print(recv_msg)
         self.send_danmu_join_group_msg()
+        #self.send_danmu_chat_msg('[emot:dy101]')
         # recv_msg = self.danmu_recv()
         # print(recv_msg)
 
@@ -268,7 +269,8 @@ class DouyuDanmuClient(object):
         self.danmu_auth_socket.sendall(msg)
 
     def send_danmu_loginreq_msg(self):
-        data = "type@=loginreq/username@=" + self.username + "/password@=1234567890123456/roomid@=" + self.room_id + "/"
+        #data = "type@=loginreq/username@=" + self.username + "/password@=1234567890123456/roomid@=" + self.room_id + "/"
+        data = "type@=loginreq/username@=43538228/ct@=0/password@=536f868c09cfbc81399401da424e42e6/roomid@=272927/devid@=069A2C8020C5AEE79BA0BF6B6E66FED3/rt@=1460663109/vk@=b505fc9809723a554088f2e7a1758a4a/ver@=20150929/ltkid@=/biz@=/stk@=/"
         msg = self.message(data)
         self.danmu_socket.sendall(msg)
 
@@ -285,6 +287,7 @@ class DouyuDanmuClient(object):
         time = self.timestamp()
         vk = hashlib.md5(bytes(time + "7oE9nPEG9xXV69phU31FYCLUagKeYtsF" + self.dev_id, 'utf-8')).hexdigest()
         data = "type@=loginreq/username@=/ct@=0/password@=/roomid@=" + self.room_id + "/devid@=" + self.dev_id + "/rt@=" + self.timestamp() + "/vk@=" + vk + "/ver@=20150929/"
+        #data = "type@=loginreq/username@=43538228/ct@=0/password@=536f868c09cfbc81399401da424e42e6/roomid@=272927/devid@=069A2C8020C5AEE79BA0BF6B6E66FED3/rt@=1460663109/vk@=b505fc9809723a554088f2e7a1758a4a/ver@=20150929/ltkid@=/biz@=/stk@=/"
         msg = self.message(data)
         self.danmu_auth_socket.sendall(msg)
 
