@@ -31,7 +31,7 @@ APP_DESC = """
                     ---- A Terminal Tools For DouyuTV
 
 @author Micheal Gardner (twocucao@gmail.com)
-                                last_update 2016-02-16
+                                last_update 2016-04-20
 """
 
 def main():

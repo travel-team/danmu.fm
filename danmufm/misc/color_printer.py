@@ -10,20 +10,20 @@ class ColorPrinter:
 
     @classmethod
     def red(cls, s):
-        print(cls.RED + s + cls.END)
+        logger.info(cls.RED + s + cls.END)
 
     @classmethod
     def green(cls, s):
-        print(cls.GREEN + s + cls.END)
+        logger.info(cls.GREEN + s + cls.END)
 
     @classmethod
     def yellow(cls, s):
-        print(cls.YELLOW + s + cls.END)
+        logger.info(cls.YELLOW + s + cls.END)
 
     @classmethod
     def lightPurple(cls, s):
-        print(cls.LIGHT_PURPLE + s + cls.END)
+        logger.info(cls.LIGHT_PURPLE + s + cls.END)
 
     @classmethod
     def purple(cls, s):
-        print(cls.PURPLE + s + cls.END)
+        logger.info(cls.PURPLE + s + cls.END)

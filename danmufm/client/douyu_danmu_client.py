@@ -94,7 +94,7 @@ class DouyuDanmuClient(object):
         # if self.live_stat == "离线":
         #     logger.info("主播离线中,正在退出...")
         # else:
-        logger.info("主播在线中,准备获取弹幕...")
+        print("主播在线中,准备获取弹幕...")
         self.print_room_info()
         t = threading.Thread(target=self.keeplive)
         t.setDaemon(True)
@@ -110,6 +110,7 @@ class DouyuDanmuClient(object):
         m2 = hashlib.md5(bytes(md5url + "1231", "utf-8"))
         self.url_json = api_url_prefix + md5url + "&auth=" + m2.hexdigest()
         res = requests.get(self.url_json)
+        print(res.text)
         js_data = json.loads(res.text)
 
         sd_rmtp_url = str(js_data["data"]["rtmp_url"]) + "/" + str(js_data["data"]["rtmp_live"])
@@ -157,19 +158,20 @@ class DouyuDanmuClient(object):
         self.danmu_socket.connect(self.DANMU_ADDR)
         self.send_auth_loginreq_msg()
         recv_msg = self.auth_recv()
-        #print('recv_msg——————————%s' % (recv_msg,))
+        print('recv_msg——————————\n%s' % (recv_msg,))
         if "live_stat@=0" in recv_msg:
             self.live_stat = "离线"
         else:
             self.live_stat = "在线"
         self.username = re.search('\/username@=(.+)\/nickname', recv_msg).group(1)
+        #recv_msg = self.auth_recv()
+        self.send_qrl_msg()
         recv_msg = self.auth_recv()
+        print(recv_msg)
         self.gid = re.search('\/gid@=(\d+)\/', recv_msg).group(1)
         self.weight = re.search('\/weight@=(\d+)\/', recv_msg).group(1)
         self.fans_count = re.search('\/fans_count@=(\d+)\/', recv_msg).group(1)
-        self.send_qrl_msg()
-        recv_msg = self.auth_recv()
-        # print(recv_msg)
+
         self.send_auth_keeplive_msg()
         recv_msg = self.auth_recv()
         # print(recv_msg)
@@ -192,11 +194,12 @@ class DouyuDanmuClient(object):
             i = line.find(':')
             data[line[:i]] = line[i + 1:]
         data['time'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.danmu_writer.write(str(data))
+        self.danmu_writer.write(str(data)+'\n')
         if "type@=" not in recv_msg:
             logger.info("无效消息")
         elif "type@=error" in recv_msg:
             logger.info("错误消息,可能认证失效")
+            exit(1)
         else:
             try:
                 msg_type = data.get('type', 'None')
