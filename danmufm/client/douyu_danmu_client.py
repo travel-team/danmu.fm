@@ -186,7 +186,7 @@ class DouyuDanmuClient(object):
     def get_danmu(self):
         # print("获取弹幕")
         recv_msg = self.danmu_recv()
-        # print(recv_msg)
+        logger.debug(recv_msg)
         msg_content = re.sub(r"/(\w+)", "\n\\1", recv_msg[:-1]).replace("@S=", "/").replace("@A=", ":").replace("@=",
                                                                                                                 ":")
         data = {}
