@@ -3,6 +3,10 @@ import re
 from .douyu_danmu_client import DouyuDanmuClient
 from urllib.request import urlopen
 from urllib.parse import unquote
+# import time
+#
+# NUM = 1
+
 class DouyuClient:
 
     """Docstring for DouyuClient. """
@@ -47,6 +51,16 @@ class DouyuClient:
             auth_server_port = auth_servers[0]["port"]
             client = DouyuDanmuClient(room,auth_server_ip, auth_server_port,g_config)
             client.start()
+            # for i in range(0, NUM):
+            #     try:
+            #         client = DouyuDanmuClient(room,auth_server_ip, auth_server_port,g_config)
+            #         client.start()
+            #         time.sleep(1)
+            #     except:
+            #         pass
+            #
+            # time.sleep(60*60*24)
+
         else:
             print("请求网页错误,正在退出...")
 

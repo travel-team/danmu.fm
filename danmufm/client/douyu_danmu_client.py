@@ -13,6 +13,10 @@ from ..model.douyu_msg import DouyuMsg
 # import sys
 import logging
 
+# data = {
+#     "num": 1
+# }
+
 logger = logging.getLogger("danmufm")
 gfif_map = {"59": {"index": 1, "name": "火箭",
                    "bimg": "http://staticlive.douyutv.com/upload/dygift/9b4638fc809d7ae7ae4e3440c7b89371.png",
@@ -100,8 +104,15 @@ class DouyuDanmuClient(object):
         t.setDaemon(True)
         t.start()
         # self.send_danmu_chat_msg("[emot:dy108]")
-        while True:
-            self.get_danmu()
+        self.get_danmu_loop()
+        # data["num"] = (data["num"] - 1)
+        # if data["num"] == 0:
+        #     self.get_danmu_loop()
+        # else:
+        #     t2 = threading.Thread(target=self.get_danmu_loop)
+        #     t2.setDaemon(True)
+        #     t2.start()
+
 
     def print_room_info(self):
         api_url_prefix = "http://douyu.com/api/v1/"
@@ -183,6 +194,13 @@ class DouyuDanmuClient(object):
         # recv_msg = self.danmu_recv()
         # print(recv_msg)
 
+    def get_danmu_loop(self):
+        while True:
+            try:
+                self.get_danmu()
+            except:
+                break
+
     def get_danmu(self):
         # print("获取弹幕")
         recv_msg = self.danmu_recv()
@@ -199,7 +217,7 @@ class DouyuDanmuClient(object):
             logger.info("无效消息")
         elif "type@=error" in recv_msg:
             logger.info("错误消息,可能认证失效")
-            exit(1)
+            raise Exception
         else:
             try:
                 msg_type = data.get('type', 'None')
@@ -234,6 +252,8 @@ class DouyuDanmuClient(object):
                     ColorPrinter.yellow(
                         "|" + msg_type_zh + "| " + nickname + " <Lv:" + level + ">" + " @ " + time + ": " +
                         gfif_map.get(gfid, '未知礼物')['name'] + hits + " hits ")
+                elif msg_type == "keeplive":
+                    pass
                 else:
                     ColorPrinter.green(recv_msg)
             except Exception as e:
